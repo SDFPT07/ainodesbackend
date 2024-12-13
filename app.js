@@ -1,13 +1,18 @@
+require("dotenv").config();
 const express = require("express");
-const app = express();
 const http = require("http");
+const aiRoutes = require("./routes/AiRoutes");
+
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  res.send("Hello from Express!");
+  res.send("Hello from devChatGPT!");
 });
+
+app.use("/api/ai", aiRoutes);
 
 const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);

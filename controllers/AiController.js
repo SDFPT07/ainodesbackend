@@ -78,11 +78,12 @@ exports.getFollowUp = async (req, res) => {
   }
 
   try {
-    const followUp = await aiService.generateFollowUp(prompt);
-    res.json({ success: true, data: followUp });
+    const followUps = await aiService.generateFollowUp(prompt);
+    res.json({ success: true, prompts: followUps });
   } catch (error) {
     console.error("Error in getFollowUp:", error);
     res.status(500).json({ error: error.message });
   }
 };
+
 

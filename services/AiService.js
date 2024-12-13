@@ -117,18 +117,32 @@ class AIService {
    * @returns {Promise<string>} - The assistant's follow-up response.
    */
   async generateFollowUp(prompt, options = {}) {
+    console.log("Prompt for follow-up:", prompt);
     try {
-      const response = await this.openai.completions.create({
-        model: "text-davinci-003",
-        prompt,
-        temperature: options.temperature || 0.7,
-        max_tokens: options.max_tokens || 500,
-        top_p: options.top_p || 0.9,
-        presence_penalty: options.presence_penalty || 0.5,
-        frequency_penalty: options.frequency_penalty || 0.3,
+      const response = await this.openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are an assistant providing follow-up prompts based on the user's input. Respond in an object-friendly format. Respond in point form with a -",
+          },
+          { role: "user", content: prompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 200,
+        top_p: 0.9,
+        presence_penalty: 0.5,
+        frequency_penalty: 0.3,
       });
+      const followUpText = response.choices[0].message.content.trim();
+      const followUpArray = followUpText
+        .split("\n") 
+        .map((item) => item.trim()) 
+        .filter((item) => item.startsWith("-")) 
+        .map((item) => item.slice(2)); 
 
-      return response.choices[0].text.trim();
+      return followUpArray; 
     } catch (error) {
       console.error("Error generating follow-up:", error);
       throw new Error("Failed to generate follow-up response");

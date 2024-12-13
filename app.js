@@ -1,10 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
+const cors = require("cors");
 const aiRoutes = require("./routes/AiRoutes");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

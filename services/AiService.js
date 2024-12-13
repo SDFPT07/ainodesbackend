@@ -120,7 +120,7 @@ class AIService {
     console.log("Prompt for follow-up:", prompt);
     try {
       const response = await this.openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
